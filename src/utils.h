@@ -258,6 +258,8 @@ static inline u8 writeread8(u64 addr, u8 data)
 
 #define sr_tkn(...) _concat(_sr_tkn, __VA_ARGS__, )(__VA_ARGS__)
 
+#define str(s) #s
+
 #define __mrs(reg)                                                                                 \
     ({                                                                                             \
         u64 val;                                                                                   \

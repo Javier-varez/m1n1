@@ -61,13 +61,14 @@ void hv_init(void)
     hv_pt_init();
 
     // Configure hypervisor defaults
-    hv_write_hcr(HCR_API | // Allow PAuth instructions
-                 HCR_APK | // Allow PAuth key registers
-                 HCR_TEA | // Trap external aborts
-                 HCR_E2H | // VHE mode (forced)
-                 HCR_RW |  // AArch64 guest
-                 HCR_AMO | // Trap SError exceptions
-                 HCR_VM);  // Enable stage 2 translation
+    hv_write_hcr(HCR_API |            // Allow PAuth instructions
+                 HCR_APK |            // Allow PAuth key registers
+                 HCR_TEA |            // Trap external aborts
+                 HCR_E2H |            // VHE mode (forced)
+                 HCR_RW |             // AArch64 guest
+                 HCR_AMO |            // Trap SError exceptions
+                 HCR_VM |             // Enable stage 2 translation
+                 HCR_TRVM | HCR_TVM); // Enable Virtual Memory traps
 
     // No guest vectors initially
     msr(VBAR_EL12, 0);

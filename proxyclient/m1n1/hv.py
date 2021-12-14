@@ -544,7 +544,6 @@ class HV(Reloadable):
 
         return f"0x{addr:x} ({name}+0x{unslid_addr - saddr:x})"
 
-
     def sym(self, addr):
         unslid_addr = addr + self.sym_offset
 
@@ -1031,7 +1030,7 @@ class HV(Reloadable):
         else:
             hcr.TACR = 1
         hcr.TIDCP = 0
-        hcr.TVM = 0
+        hcr.TVM = 1
         hcr.FMO = 1
         hcr.IMO = 0
         self.u.msr(HCR_EL2, hcr.value)

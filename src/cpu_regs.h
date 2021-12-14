@@ -129,6 +129,18 @@
 #define SYS_IMP_APL_PMC8 sys_reg(3, 2, 15, 9, 0)
 #define SYS_IMP_APL_PMC9 sys_reg(3, 2, 15, 10, 0)
 
+#define SYS_TTBR0_EL1      sys_reg(3, 0, 2, 0, 0)
+#define SYS_TTBR1_EL1      sys_reg(3, 0, 2, 0, 1)
+#define SYS_TCR_EL1        sys_reg(3, 0, 2, 0, 2)
+#define SYS_ESR_EL1        sys_reg(3, 0, 5, 2, 0)
+#define SYS_FAR_EL1        sys_reg(3, 0, 6, 0, 0)
+#define SYS_AFSR0_EL1      sys_reg(3, 0, 5, 1, 0)
+#define SYS_AFSR1_EL1      sys_reg(3, 0, 5, 1, 1)
+#define SYS_MAIR_EL1       sys_reg(3, 0, 10, 2, 0)
+#define SYS_AMAIR_EL1      sys_reg(3, 0, 10, 3, 0)
+#define SYS_CONTEXTIDR_EL1 sys_reg(3, 0, 13, 0, 1)
+#define SYS_SCTLR_EL1      sys_reg(3, 0, 1, 0, 0)
+
 #define SYS_IMP_APL_LSU_ERR_STS   sys_reg(3, 3, 15, 0, 0)
 #define SYS_IMP_APL_E_LSU_ERR_STS sys_reg(3, 3, 15, 2, 0)
 

@@ -128,6 +128,22 @@ static void hv_update_fiq(void)
             _msr(sr_tkn(sr), regs[rt]);                                                            \
         return true;
 
+#define SYSREG_MAP2(sr, to)                                                                        \
+    case SYSREG_ISS(sr):                                                                           \
+        if (is_read)                                                                               \
+            regs[rt] = _mrs(to);                                                                   \
+        else                                                                                       \
+            _msr(to, regs[rt]);                                                                    \
+        return true;
+
+#define SYSREG_IGN(sr)                                                                             \
+    case SYSREG_ISS(sr):                                                                           \
+        if (is_read)                                                                               \
+            regs[rt] = _mrs(sr_tkn(sr));                                                           \
+        else                                                                                       \
+            printf("[Ignored] write %lx to %s\n", regs[rt], str(sr_tkn(sr)));                      \
+        return true;
+
 static bool hv_handle_msr(struct exc_info *ctx, u64 iss)
 {
     u64 reg = iss & (ESR_ISS_MSR_OP0 | ESR_ISS_MSR_OP2 | ESR_ISS_MSR_OP1 | ESR_ISS_MSR_CRn |
@@ -188,6 +204,27 @@ static bool hv_handle_msr(struct exc_info *ctx, u64 iss)
         SYSREG_PASS(SYS_IMP_APL_PMC7)
         SYSREG_PASS(SYS_IMP_APL_PMC8)
         SYSREG_PASS(SYS_IMP_APL_PMC9)
+        SYSREG_MAP2(SYS_TTBR0_EL1, TTBR0_EL12)
+        SYSREG_MAP2(SYS_TTBR1_EL1, TTBR1_EL12)
+        SYSREG_MAP2(SYS_TCR_EL1, TCR_EL12)
+        SYSREG_MAP2(SYS_ESR_EL1, ESR_EL12)
+        SYSREG_MAP2(SYS_FAR_EL1, FAR_EL12)
+        SYSREG_MAP2(SYS_AFSR0_EL1, AFSR0_EL12)
+        SYSREG_MAP2(SYS_AFSR1_EL1, AFSR1_EL12)
+        SYSREG_MAP2(SYS_MAIR_EL1, MAIR_EL12)
+        SYSREG_MAP2(SYS_AMAIR_EL1, AMAIR_EL12)
+        SYSREG_MAP2(SYS_CONTEXTIDR_EL1, CONTEXTIDR_EL12)
+        case SYSREG_ISS(SYS_SCTLR_EL1):
+            printf("SCTLR_EL1 %d\n", is_read);
+            if (is_read) {
+                regs[rt] = mrs(SYS_SCTLR_EL12);
+            } else {
+                /* msr(SCTLR_EL12, regs[rt] & ~((u64)1)); */
+                /* printf("msr(SYS_SCTLR_EL1, 0x%08lx): Writing SCTLR_EL1!\n", regs[rt] &
+                 * ~((u64)1)); */
+                hv_exc_proxy(ctx, START_HV, HV_USER_INTERRUPT, NULL);
+            }
+            return true;
 
         /*
          * Handle this one here because m1n1/Linux (will) use it for explicit cpuidle.
