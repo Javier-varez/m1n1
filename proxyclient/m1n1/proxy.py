@@ -43,12 +43,12 @@ class Feature(IntFlag):
         return ", ".join(feature.name for feature in self.__class__
             if feature & self) or "<none>"
 
-
 class START(IntEnum):
     BOOT = 0
     EXCEPTION = 1
     EXCEPTION_LOWER = 2
     HV = 3
+    VM = 4
 
 class EXC(IntEnum):
     SYNC = 0
@@ -876,7 +876,6 @@ class M1N1Proxy(Reloadable):
         self.request(self.P_MMU_RESTORE, flags)
     def mmu_init_secondary(self, cpu):
         self.request(self.P_MMU_INIT_SECONDARY, cpu)
-
 
     def xzdec(self, inbuf, insize, outbuf=0, outsize=0):
         return self.request(self.P_XZDEC, inbuf, insize, outbuf,

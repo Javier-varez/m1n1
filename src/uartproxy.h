@@ -12,6 +12,7 @@ typedef enum _uartproxy_start_reason_t {
     START_EXCEPTION,
     START_EXCEPTION_LOWER,
     START_HV,
+    START_VM,
 } uartproxy_boot_reason_t;
 
 typedef enum _uartproxy_exc_code_t {
